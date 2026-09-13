@@ -206,12 +206,12 @@ export default function BusinessPage({
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <button
-              disabled
-              className="rounded-xl bg-blue-600/40 px-4 py-2 text-sm text-blue-200"
-            >
-              Edit profile — Coming next
-            </button>
+            <Link
+                href={`/businesses/${business.id}/edit`}
+                className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
+              >
+                Edit profile
+            </Link>
 
             <button
               disabled
