@@ -28,11 +28,172 @@ model Post {
 }
 
 model Business {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String?
-  phone       String?
-  logo        String?
+  id                 Int     @id @default(autoincrement())
+  name               String
+  legalName          String?
+  category           String?
+  description        String?
+  tagline            String?
+  country            String  @default("Uganda")
+  city               String?
+  region             String?
+  timezone           String  @default("Africa/Kampala")
+  currency           String  @default("UGX")
+  language           String  @default("en")
+  registrationNumber String?
+  taxNumber          String?
+
+  email    String?
+  phone    String?
+  whatsapp String?
+  website  String?
+  address  String?
+
+  logo            String?
+  coverImage      String?
+  brandColors     String?
+  brandGuidelines String?
+
+  status BusinessStatus @default(ACTIVE)
+
+  locations    BusinessLocation[]
+  contacts     BusinessContact[]
+  services     BusinessService[]
+  logoRequests LogoRequest[]
+  documents    BusinessDocument[]
+  activities   BusinessActivity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessLocation {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  name      String
+  country   String
+  city      String?
+  region    String?
+  address   String?
+  phone     String?
+  email     String?
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessContact {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  name      String
+  role      String?
+  email     String?
+  phone     String?
+  whatsapp  String?
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessService {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  name          String
+  description   String?
+  status        ServiceStatus @default(ACTIVE)
+  price         Decimal?      @db.Decimal(12, 2)
+  currency      String        @default("UGX")
+  startDate     DateTime?
+  renewalDate   DateTime?
+  paymentStatus PaymentStatus @default(PENDING)
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LogoRequest {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  status          LogoRequestStatus @default(NOT_REQUESTED)
+  requestedStyle  String?
+  preferredColors String?
+  slogan          String?
+  description     String?
+  concepts        Int               @default(1)
+  deadline        DateTime?
+  price           Decimal?          @db.Decimal(12, 2)
+  currency        String            @default("UGX")
+  paymentStatus   PaymentStatus     @default(PENDING)
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessDocument {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  name         String
+  fileUrl      String
+  documentType String?
+  notes        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessActivity {
+  id         Int      @id @default(autoincrement())
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId Int
+
+  action      String
+  description String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+}
+
+enum BusinessStatus {
+  ACTIVE
+  PENDING_SETUP
+  SUSPENDED
+  ARCHIVED
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum LogoRequestStatus {
+  NOT_REQUESTED
+  REQUEST_SUBMITTED
+  PAYMENT_PENDING
+  DESIGN_IN_PROGRESS
+  PREVIEW_READY
+  REVISION_REQUESTED
+  APPROVED
+  DELIVERED
 }
