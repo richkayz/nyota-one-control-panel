@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 type Business = {
@@ -450,10 +451,12 @@ export default function Home() {
                 ) : (
                   <div className="space-y-3">
                     {businesses.map((business) => (
-                      <div
-                        key={business.id}
-                        className={`rounded-xl border p-4 ${borderClass}`}
+                      <Link
+                            key={business.id}
+                              href={`/businesses/${business.id}`}
+                            className={`block rounded-xl border p-4 transition hover:border-blue-500 ${borderClass}`}
                       >
+                        
                         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                           <div>
                             <h4 className="font-semibold">
@@ -473,7 +476,7 @@ export default function Home() {
                             ID: {business.id}
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 )}
