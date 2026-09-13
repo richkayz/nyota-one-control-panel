@@ -21,9 +21,19 @@ export async function POST(request: Request) {
     );
   }
 
+  const ownerId = Number(body.ownerId);
+
+  if (!Number.isInteger(ownerId) || ownerId <= 0) {
+    return NextResponse.json(
+      { error: "Valid ownerId is required" },
+      { status: 400 }
+    );
+  }
+
   const business = await prisma.business.create({
     data: {
       name: body.name,
+      ownerId,
       email: body.email || null,
       phone: body.phone || null,
       logo: body.logo || null,
