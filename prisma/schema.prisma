@@ -13,6 +13,7 @@ model User {
   username  String?
   name      String?
   posts     Post[]
+  businesses Business[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -28,6 +29,8 @@ model Post {
 }
 
 model Business {
+  owner   User @relation(fields: [ownerId], references: [id])
+  ownerId Int
   id                 Int     @id @default(autoincrement())
   name               String
   legalName          String?
